@@ -1,0 +1,22 @@
+services:
+  late-chunking-api:
+    build: .
+    container_name: late_chunking_ruri
+    ports:
+      - "8089:8000"
+    environment:
+      # ここで設定したAPIキーをリクエストヘッダーで要求します
+      - API_KEY=my-super-secret-api-key
+    volumes:
+      # モデルのダウンロードキャッシュを保持するためのボリューム
+      - huggingface_cache:/root/.cache/huggingface
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+
+volumes:
+  huggingface_cache:
